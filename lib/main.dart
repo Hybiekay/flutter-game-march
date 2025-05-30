@@ -32,11 +32,14 @@ class GameScreenState extends State<GameScreen> {
   int player = 1;
   int computer = 2;
   String status = '';
+  int playerWinning = 0;
+  int computerWinning = 0;
 
   runComputer() async {
     Future.delayed(Duration(milliseconds: 500), () async {
       if (isWin(player, boards)) {
         setState(() {
+          playerWinning += 1;
           boards = List.filled(9, 0);
         });
       }
@@ -78,6 +81,12 @@ class GameScreenState extends State<GameScreen> {
 
       if (isWin(computer, boards)) {
         setState(() {
+          computerWinning++;
+          boards = List.filled(9, 0);
+        });
+      }
+      if (boards.every((b) => b != 0)) {
+        setState(() {
           boards = List.filled(9, 0);
         });
       }
@@ -108,6 +117,14 @@ class GameScreenState extends State<GameScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
+        title: Row(
+          spacing: 10,
+          children: [
+            Text("60"),
+            Text("C: $computerWinning"),
+            Text("P: $playerWinning"),
+          ],
+        ),
         actions: [
           Text("Coin: 200"),
           SizedBox(width: 5),
